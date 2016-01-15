@@ -8,7 +8,7 @@
 transpose_community <- function(df, time.var, species.var, abundance.var) {
     df<-as.data.frame(df)
     df[species.var]<-if(is.factor(df[[species.var]])==TRUE){factor(df[[species.var]])} else {df[species.var]}  
-    df<-df[order(df[time.var], df[species.var]),]
+    df<-df[order(df[[time.var]], df[[species.var]]),]
     comdat<-tapply(df[[abundance.var]], list(df[[time.var]], as.vector(df[[species.var]])), sum)
     comdat[is.na(comdat)]<-0
     comdat<-as.data.frame(comdat)
@@ -31,7 +31,7 @@ check_names <- function(given, data) {
 #' @param time.var The name of the time column from df
 #' @param species.var The name of the species column from df
 check_single_onerep <- function(df, time.var, species.var){
-  if(max(table(df[,time.var], df[,species.var]))>1) warning("Either data span multiple replicates with no replicate.var specified or multiple records within years for some species") }
+  if(max(table(df[[time.var]], df[[species.var]]))>1) warning("Either data span multiple replicates with no replicate.var specified or multiple records within years for some species") }
 
 #' Utility function to ensure only a single record exists for a given species within one replicate, for one time point. 
 #' @param df A dataframe containing time.var, species.var, and replicate.var columns
@@ -40,7 +40,7 @@ check_single_onerep <- function(df, time.var, species.var){
 #' @param replicate.var The name of the replicate column from df
 
 check_single <- function(df, time.var, species.var, replicate.var){
-  X <- split(df, df[replicate.var]) 
+  X <- split(df, df[[replicate.var]]) 
   checksingle <- lapply(X, FUN = function(xx) apply(table(xx[[species.var]], xx[[time.var]]), 2, function(x) any(x>1)))    
   reptest <- unlist(lapply(checksingle, any))    
   yrtest <- lapply(checksingle, which)
@@ -64,7 +64,28 @@ check_single <- function(df, time.var, species.var, replicate.var){
 #' @param abundance.var The name of the replicate column from df
 
 check_numeric <- function(df, time.var, abundance.var) {
-  if(!is.numeric(df[[abundance.var]])) { stop("Abundance variable is not numeric") }
   if(!is.numeric(df[[time.var]])) { stop("Time variable is not numeric") }
+  if(!is.numeric(df[[abundance.var]])) { stop("Abundance variable is not numeric") }
   }
 
+#' Utility function to stop calculations if only one species occurs in at least one replicate
+#' @param df A dataframe containing time.var, species.var and abundance.var columns
+#' @param species.var The name of the species column from df
+#' @param replicate.var The name of the replicate column from df
+check_multispp <- function(df, species.var, replicate.var){
+  spptable<-table(df[[species.var]], df[[replicate.var]])
+  spptable[spptable>1] <- 1
+if(min(colSums(spptable)) <2) 
+  stop("One or more replicates consists of only a single species; 
+       please remove these replicates prior to calculations ")}
+
+
+#' Utility function to stop calculations if the species never change in a replicate
+#' @param comdat A community dataframe
+check_sppvar <- function(comdat){
+  sppvar <- sum(apply(comdat, 2, var))
+  if(sppvar == 0) 
+    stop("One or more replicates consist of species that never vary;
+         please remove these replicates before calculation")}
+
+  

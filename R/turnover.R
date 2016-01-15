@@ -45,6 +45,7 @@ turnover <- function(df, time.var="year", species.var="species", abundance.var="
     } else {
       df[replicate.var]<-if(is.factor(df[[replicate.var]])){factor(df[[replicate.var]])} else {df[replicate.var] }
       check_single(df, time.var, species.var, replicate.var)
+      df<-df[order(df[[replicate.var]]),]
       X <- split(df, df[replicate.var])
       out <- lapply(X, FUN=turnover_allyears, time.var, species.var, abundance.var, metric)
       ID <- unique(names(out))
@@ -80,7 +81,7 @@ turnover_allyears <- function(df, time.var, species.var, abundance.var, metric=c
     metric = match.arg(metric) # for partial argument matching
   
     check_numeric(df, time.var, abundance.var)
-    df<-df[order(df[time.var]),]
+    df<-df[order(df[[time.var]]),]
     df<-df[which(df[[abundance.var]]>0),]
     
     ## split data by year
