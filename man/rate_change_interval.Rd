@@ -4,8 +4,8 @@
 \alias{rate_change_interval}
 \title{Differences in community composition over successive time lag intervals}
 \usage{
-rate_change_interval(df, time.var = "year", species.var = "species",
-  abundance.var = "abundance", replicate.var = NA)
+rate_change_interval(df, time.var, species.var, abundance.var,
+  replicate.var = NA)
 }
 \arguments{
 \item{df}{A data frame containing time, species and abundance columns and an optional column of replicates}
@@ -29,18 +29,27 @@ The input data frame needs to contain columns for time, species and abundance; t
 If multiple replicates are included in the data frame, that column should be specified with replicate.var. Each replicate should reflect a single experimental unit - there must be a single abundance value per species within each time point and replicate.
 }
 \description{
-Calculates the differences in species composition within a community over increasing time 
-intervals. Differences in species composition are characterized by Euclidean distances, 
-which are calculated on pair-wise communities across the entire time series. 
-For example, a data set with 6 time intervals will have distance values for five one-year time lags 
-(year 1 vs year 2, year 2 vs year 3 ...), 
-4 two-year time lags (year 1 vs year 3, year 2 vs year 4 ...) and so forth. 
+Calculates the differences in species composition within a community over increasing time
+intervals. Differences in species composition are characterized by Euclidean distances,
+which are calculated on pair-wise communities across the entire time series.
+For example, a data set with 6 time intervals will have distance values for five one-year time lags
+(year 1 vs year 2, year 2 vs year 3 ...),
+4 two-year time lags (year 1 vs year 3, year 2 vs year 4 ...) and so forth.
 Returns the full set of community distance values and associated time lag intervals.
 }
 \examples{
 data(knz_001d)
-rate_change_interval(knz_001d[knz_001d$subplot=="A_1",]) # for one subplot
-rate_change_interval(knz_001d, replicate.var = "subplot") # across all subplots
+rate_change_interval(knz_001d[knz_001d$subplot=="A_1",], 
+                     time.var = "year", 
+                     species.var = "species",
+                     abundance.var = "abundance") # for one subplot
+                     
+                     
+rate_change_interval(knz_001d, 
+                     time.var = "year", 
+                     species.var = "species",
+                     abundance.var = "abundance",
+                      replicate.var = "subplot") # across all subplots
 }
 \references{
 Collins, S. L., Micheli, F. and Hartt, L. 2000. A method to determine rates andpatterns of variability in ecological communities. - Oikos 91: 285-293.

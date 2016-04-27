@@ -4,8 +4,7 @@
 \alias{rate_change}
 \title{Rate of community change over successive time intervals}
 \usage{
-rate_change(df, time.var = "year", species.var = "species",
-  abundance.var = "abundance", replicate.var = NA)
+rate_change(df, time.var, species.var, abundance.var, replicate.var = NA)
 }
 \arguments{
 \item{df}{A data frame containing time, species and abundance columns and an optional column of replicates}
@@ -19,7 +18,7 @@ rate_change(df, time.var = "year", species.var = "species",
 \item{replicate.var}{The name of the optional replicate column}
 }
 \value{
-The \code{rate_change} function returns a numeric rate change value unless a replication column is specified in the input data frame. 
+The \code{rate_change} function returns a numeric rate change value unless a replication column is specified in the input data frame.
 If replication is specified, the function returns a data frame with the following attributes:
 \itemize{
  \item{rate_change: }{A numeric column with the synchrony values.}
@@ -27,28 +26,36 @@ If replication is specified, the function returns a data frame with the followin
 }
 }
 \description{
-Calculates the slope of the differences in species composition within a community over increasing time 
-intervals, which provides a  measures of the rate of directional change in community composition. 
-Differences in species composition are characterized by Euclidean distances, 
-which are calculated on pair-wise communities across the entire time series. 
-For example, a data set with six time intervals will have distance values for five one-year time lags 
-(year 1 vs year 2, year 2 vs year 3 ...), 
-four two-year time lags (year 1 vs year 3, year 2 vs year 4 ...) and so forth. 
-These distance values are regressed against the time lag interval. 
+Calculates the slope of the differences in species composition within a community over increasing time
+intervals, which provides a  measures of the rate of directional change in community composition.
+Differences in species composition are characterized by Euclidean distances,
+which are calculated on pair-wise communities across the entire time series.
+For example, a data set with six time intervals will have distance values for five one-year time lags
+(year 1 vs year 2, year 2 vs year 3 ...),
+four two-year time lags (year 1 vs year 3, year 2 vs year 4 ...) and so forth.
+These distance values are regressed against the time lag interval.
 The slope of the regression line is reported as an indication of the rate and direction of compositional change in the community.
 }
 \details{
 The input data frame needs to contain columns for time, species and abundance; time.var, species.var and abundance.var are used to indicate which columns contain those variables.
 If multiple replicates are included in the data frame, that column should be specified with replicate.var. Each replicate should reflect a single experimental unit - there must be a single abundance value per species within each time point and replicate.
 
-The \code{rate_change} function uses linear regression to relate Euclidean distances to time lag intervals. 
+The \code{rate_change} function uses linear regression to relate Euclidean distances to time lag intervals.
 It is recommended that fit of this relationship be verified using \code{rate_change_interval},
 which returns the full set of community distance values and associated time lag intervals.
 }
 \examples{
 data(knz_001d)
-rate_change(knz_001d[knz_001d$subplot=="A_1",]) # for one subplot
-rate_change(knz_001d, replicate.var = "subplot") # across all subplots
+rate_change(knz_001d[knz_001d$subplot=="A_1",],
+                       time.var = "year", 
+                       species.var = "species",
+                       abundance.var = "abundance") # for one subplot
+                       
+rate_change(knz_001d, 
+             time.var = "year", 
+             species.var = "species",
+             abundance.var = "abundance",
+             replicate.var = "subplot") # across all subplots
 }
 \references{
 Collins, S. L., Micheli, F. and Hartt, L. 2000. A method to determine rates andpatterns of variability in ecological communities. - Oikos 91: 285-293.

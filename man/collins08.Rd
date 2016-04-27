@@ -12,7 +12,7 @@ Collins, Scott L., Katharine N. Suding, Elsa E. Cleland, Michael Batty, Steven C
 data(collins08)
 }
 \description{
-A dataset of tallgrass prairie plant composition at one annually burned and one unburned 
+A dataset of tallgrass prairie plant composition at one annually burned and one unburned
 site over time at the Konza Prairie LTER, Manhattan Kansas (Collins et al. 2008).
 }
 \details{

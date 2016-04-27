@@ -4,6 +4,7 @@ options(digits = 3)
 
 ## ----echo=FALSE----------------------------------------------------------
 library(codyn)
+library(knitr)
 data(collins08)
 kable(head(collins08))
 
@@ -13,8 +14,6 @@ KNZ_turnover <- turnover(df = collins08,
                        species.var = "species", 
                        abundance.var = "abundance", 
                        replicate.var = "replicate")
-
-## ----echo=FALSE----------------------------------------------------------
     kable(head(KNZ_turnover))
 
 ## ----results='asis'------------------------------------------------------
@@ -29,13 +28,19 @@ KNZ_turnover_agg <- turnover(df = collins08,
 
 ## ----results='asis'------------------------------------------------------
 KNZ_appearance <- turnover(df = collins08, 
-                         replicate.var = "replicate",
-                         metric = "appearance")
+                        time.var = "year",
+                        species.var = "species",
+                        abundance.var = "abundance",
+                        replicate.var = "replicate",
+                        metric = "appearance")
 
 ## ----results='asis'------------------------------------------------------
 KNZ_disappearance <- turnover(df = collins08,
-                            replicate.var = "replicate",
-                            metric = "disappearance")
+                        time.var = "year",
+                        species.var = "species",
+                        abundance.var = "abundance",
+                        replicate.var = "replicate",
+                        metric = "disappearance")
 
 ## ----fig.width = 7, fig.height = 4, echo=FALSE---------------------------
 library(ggplot2)
@@ -44,9 +49,12 @@ ggplot(KNZ_turnover, aes(x=year, y=total, color=replicate)) + geom_line(size = 2
 ## ----fig.width = 7, fig.height = 4, echo=FALSE---------------------------
 KNZ_appearance$metric<-"appearance"
 names(KNZ_appearance)[1]="turnover"
+
 KNZ_disappearance$metric<-"disappearance"
 names(KNZ_disappearance)[1]="turnover"
+
 KNZ_appdisapp<-rbind(KNZ_appearance, KNZ_disappearance)
+
 ggplot(KNZ_appdisapp, aes(x=year, y=turnover, color=replicate)) + geom_line(size = 2) + theme_bw() + facet_wrap(~metric) + ggtitle("Species appearances and disappearances \n Annually burned vs unburned plots, Konza
           ")
 
@@ -85,7 +93,11 @@ ggplot(aggdat, aes(year, abundance, color = species)) +
   ggtitle("Dominant species abundances \n Annually burned vs unburned plots, Konza \n")
 
 ## ------------------------------------------------------------------------
-KNZ_rankshift <- mean_rank_shift(df=collins08,  abundance.var = "abundance", replicate.var = "replicate")
+KNZ_rankshift <- rank_shift(df=collins08,
+                        time.var = "year",
+                        species.var = "species",
+                        abundance.var = "abundance", 
+                        replicate.var = "replicate")
 #Select the final time point from the returned time.var_pair
 KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
 
@@ -93,7 +105,10 @@ KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
 kable(head(KNZ_rankshift))
 
 ## ------------------------------------------------------------------------
-KNZ_rankshift_agg <- mean_rank_shift(df = collins08)
+KNZ_rankshift_agg <- rank_shift(df = collins08,
+                        time.var = "year",
+                        species.var = "species",
+                        abundance.var = "abundance")
 
 ## ----fig.width = 7, fig.height = 4---------------------------------------
 # Create a column with the final year from the returned time.var_pair

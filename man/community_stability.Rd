@@ -4,8 +4,7 @@
 \alias{community_stability}
 \title{Community Stability}
 \usage{
-community_stability(df, time.var = "year", abundance.var = "abundance",
-  replicate.var = NA)
+community_stability(df, time.var, abundance.var, replicate.var = NA)
 }
 \arguments{
 \item{df}{A data frame containing time, species and abundance columns and an optional column of replicates}
@@ -17,7 +16,7 @@ community_stability(df, time.var = "year", abundance.var = "abundance",
 \item{replicate.var}{The name of the optional replicate column}
 }
 \value{
-The community_stability function returns a numeric stability value unless a replication column is specified in the input data frame. 
+The community_stability function returns a numeric stability value unless a replication column is specified in the input data frame.
 If replication is specified, the function returns a data frame with the following attributes:
 \itemize{
  \item{stability: }{A numeric column with the stability values.}
@@ -33,8 +32,13 @@ If multiple replicates are included in the data frame, that column should be spe
 }
 \examples{
 data(knz_001d)
-community_stability(knz_001d[knz_001d$subplot=="A_1",]) # for one subplot
-community_stability(knz_001d, replicate.var = "subplot") # across all subplots
+community_stability(knz_001d[knz_001d$subplot=="A_1",], 
+                     time.var = "year", 
+                     abundance.var = "abundance") # for one subplot
+community_stability(knz_001d,
+                     time.var = "year", 
+                     abundance.var = "abundance",
+                     replicate.var = "subplot") # across all subplots
 }
 \references{
 Tilman, D. "The Ecological Consequences of Changes in Biodiversity: A Search for General Principles." Ecology 80, no. 5 (July 1999): 1455-74. doi:10.1890/0012-9658(1999)080[1455:TECOCI]2.0.CO;2.

@@ -4,8 +4,8 @@
 \alias{turnover}
 \title{Species Turnover}
 \usage{
-turnover(df, time.var = "year", species.var = "species",
-  abundance.var = "abundance", replicate.var = NA, metric = "total")
+turnover(df, time.var, species.var, abundance.var, replicate.var = NA,
+  metric = "total")
 }
 \arguments{
 \item{df}{A data frame containing time, species and abundance columns and an optional column of replicates}
@@ -45,13 +45,27 @@ If multiple replicates are included in the data frame, that column should be spe
  data(knz_001d)
 
  # Calculate relative total turnover within replicates
- total.res <- turnover(df=knz_001d,  replicate.var="subplot")
+ total.res <- turnover(df=knz_001d,  
+               time.var = "year", 
+               species.var = "species",
+               abundance.var = "abundance", 
+               replicate.var="subplot")
  
  # Calculate relative species appearances within replicates
- appear.res <- turnover(df=knz_001d, replicate.var="subplot", metric="appearance")
+ appear.res <- turnover(df=knz_001d, 
+               time.var = "year", 
+               species.var = "species",
+               abundance.var = "abundance",  
+               replicate.var="subplot", 
+               metric="appearance")
  
  # Calculate relative species disappearances within replicates
- disappear.res <- turnover(df=knz_001d, replicate.var="subplot", metric="disappearance")
+ disappear.res <- turnover(df=knz_001d, 
+               time.var = "year", 
+               species.var = "species",
+               abundance.var = "abundance", 
+               replicate.var="subplot", 
+               metric="disappearance")
  
 }
 \references{

@@ -4,8 +4,8 @@
 \alias{synchrony}
 \title{Species synchrony}
 \usage{
-synchrony(df, time.var = "year", species.var = "species",
-  abundance.var = "abundance", metric = "Loreau", replicate.var = NA)
+synchrony(df, time.var, species.var, abundance.var, metric = "Loreau",
+  replicate.var = NA)
 }
 \arguments{
 \item{df}{A data frame containing time, species and abundance columns and an optional column of replicates}
@@ -25,7 +25,7 @@ synchrony(df, time.var = "year", species.var = "species",
 \item{replicate.var}{The name of the optional replicate column}
 }
 \value{
-The \code{synchrony} function returns a numeric synchrony value unless a replication column is specified in the input data frame. 
+The \code{synchrony} function returns a numeric synchrony value unless a replication column is specified in the input data frame.
 If replication is specified, the function returns a data frame with the following attributes:
 \itemize{
  \item{synchrony: }{A numeric column with the synchrony values.}
@@ -33,7 +33,7 @@ If replication is specified, the function returns a data frame with the followin
 }
 }
 \description{
-Calculates the degree synchrony in species abundances within a community over time. 
+Calculates the degree synchrony in species abundances within a community over time.
 Includes the option for two different synchrony metrics. The first, developed by Loreau and de Mazancourt (2008), compares the variance of the aggregated community with the variance of individual components.
 The second, developed by Gross et al. (2014), compares the average correlation of each individual species with the rest of the aggregated community.
 }
@@ -43,10 +43,23 @@ If multiple replicates are included in the data frame, that column should be spe
 }
 \examples{
 data(knz_001d)
-synchrony(knz_001d[knz_001d$subplot=="A_1",]) # for one subplot
+synchrony(knz_001d[knz_001d$subplot=="A_1",],
+                     time.var = "year", 
+                     species.var = "species",
+                     abundance.var = "abundance") # for one subplot
 \dontrun{
-synchrony(knz_001d, replicate.var = "subplot") # across all subplots
-synchrony(knz_001d, replicate.var = "subplot", metric="Gross") # With Gross et al. (2014) metric.
+synchrony(knz_001d, 
+             time.var = "year", 
+             species.var = "species",
+             abundance.var = "abundance",
+             replicate.var = "subplot") # across all subplots
+             
+synchrony(knz_001d,  
+             time.var = "year", 
+             species.var = "species",
+             abundance.var = "abundance",
+             replicate.var = "subplot", 
+             metric="Gross") # With Gross et al. (2014) metric.
 }
 }
 \references{

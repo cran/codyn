@@ -1,3 +1,18 @@
+Version 1.1.0
+-------------
+
+NEW FEATURES
+
+* Add S3 class for cyclic_shift *#66)
+* add an alias for `temporal_torus_translation` (#65)
+
+BUG FIXES
+
+* selectively import from stats and assertthat (#64)
+* adjustments to coding consistency (#63)
+* import 'stats' and 'permute' package methods (#69)
+* Improved function and parameter names
+
 Version 1.0.1
 -------------
 
