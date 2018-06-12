@@ -10,21 +10,19 @@ kable(head(collins08))
 
 ## ----results='asis'------------------------------------------------------
 KNZ_turnover <- turnover(df = collins08, 
-                       time.var = "year", 
-                       species.var = "species", 
-                       abundance.var = "abundance", 
-                       replicate.var = "replicate")
-    kable(head(KNZ_turnover))
+                         time.var = "year", 
+                         species.var = "species", 
+                         abundance.var = "abundance", 
+                         replicate.var = "replicate")
 
-## ----results='asis'------------------------------------------------------
+## ----echo=FALSE----------------------------------------------------------
+kable(head(KNZ_turnover))
+
+## ----results='asis', error = TRUE----------------------------------------
 KNZ_turnover_agg <- turnover(df = collins08, 
                           species.var = "species",
                           time.var = "year",
-                          abundance.var = "abundance",
-                          replicate.var = NA)
-
-## ----echo=FALSE----------------------------------------------------------
-    kable(head(KNZ_turnover_agg))
+                          abundance.var = "abundance")
 
 ## ----results='asis'------------------------------------------------------
 KNZ_appearance <- turnover(df = collins08, 
@@ -104,7 +102,7 @@ KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
 ## ----echo=FALSE----------------------------------------------------------
 kable(head(KNZ_rankshift))
 
-## ------------------------------------------------------------------------
+## ---- error = TRUE-------------------------------------------------------
 KNZ_rankshift_agg <- rank_shift(df = collins08,
                         time.var = "year",
                         species.var = "species",
