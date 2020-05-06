@@ -1,30 +1,30 @@
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 library(knitr)
 options(digits = 3)
 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 library(codyn)
 library(knitr)
 data(collins08)
 kable(head(collins08))
 
-## ----results='asis'------------------------------------------------------
+## ----results='asis'-----------------------------------------------------------
 KNZ_turnover <- turnover(df = collins08, 
                          time.var = "year", 
                          species.var = "species", 
                          abundance.var = "abundance", 
                          replicate.var = "replicate")
 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 kable(head(KNZ_turnover))
 
-## ----results='asis', error = TRUE----------------------------------------
+## ----results='asis', error = TRUE---------------------------------------------
 KNZ_turnover_agg <- turnover(df = collins08, 
                           species.var = "species",
                           time.var = "year",
                           abundance.var = "abundance")
 
-## ----results='asis'------------------------------------------------------
+## ----results='asis'-----------------------------------------------------------
 KNZ_appearance <- turnover(df = collins08, 
                         time.var = "year",
                         species.var = "species",
@@ -32,7 +32,7 @@ KNZ_appearance <- turnover(df = collins08,
                         replicate.var = "replicate",
                         metric = "appearance")
 
-## ----results='asis'------------------------------------------------------
+## ----results='asis'-----------------------------------------------------------
 KNZ_disappearance <- turnover(df = collins08,
                         time.var = "year",
                         species.var = "species",
@@ -40,11 +40,11 @@ KNZ_disappearance <- turnover(df = collins08,
                         replicate.var = "replicate",
                         metric = "disappearance")
 
-## ----fig.width = 7, fig.height = 4, echo=FALSE---------------------------
+## ----fig.width = 7, fig.height = 4, echo=FALSE--------------------------------
 library(ggplot2)
 ggplot(KNZ_turnover, aes(x=year, y=total, color=replicate)) + geom_line(size = 2) + theme_bw()
 
-## ----fig.width = 7, fig.height = 4, echo=FALSE---------------------------
+## ----fig.width = 7, fig.height = 4, echo=FALSE--------------------------------
 KNZ_appearance$metric<-"appearance"
 names(KNZ_appearance)[1]="turnover"
 
@@ -56,7 +56,7 @@ KNZ_appdisapp<-rbind(KNZ_appearance, KNZ_disappearance)
 ggplot(KNZ_appdisapp, aes(x=year, y=turnover, color=replicate)) + geom_line(size = 2) + theme_bw() + facet_wrap(~metric) + ggtitle("Species appearances and disappearances \n Annually burned vs unburned plots, Konza
           ")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 ## Generate some sample data 
 yr = 1977:2003
@@ -68,15 +68,15 @@ dat = data.frame(year = rep(yr, 3),
            species = gl(3, length(yr), labels = c("sp1","sp2","sp3")),
            abundance = c(sp1, sp2, sp3))
 
-## ---- fig.width = 7, fig.height = 4--------------------------------------
+## ---- fig.width = 7, fig.height = 4-------------------------------------------
 ggplot(dat, aes(year, abundance, color = species)) + 
   geom_line(size = 2) + theme_bw()
 
-## ---- fig.width = 5, fig.height = 5--------------------------------------
+## ---- fig.width = 5, fig.height = 5-------------------------------------------
 ggplot(dat, aes(year, abundance, color = species)) + 
   geom_line(size = 2) + coord_polar() + theme_bw() 
 
-## ---- fig.width = 7, fig.height = 5--------------------------------------
+## ---- fig.width = 7, fig.height = 5-------------------------------------------
 
 aggdat <- aggregate(abundance ~ species * year * replicate, 
                     data = subset(collins08, 
@@ -90,7 +90,7 @@ ggplot(aggdat, aes(year, abundance, color = species)) +
   geom_line(size = 2) + coord_polar() + theme_bw() + facet_wrap(~replicate) +
   ggtitle("Dominant species abundances \n Annually burned vs unburned plots, Konza \n")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 KNZ_rankshift <- rank_shift(df=collins08,
                         time.var = "year",
                         species.var = "species",
@@ -99,16 +99,16 @@ KNZ_rankshift <- rank_shift(df=collins08,
 #Select the final time point from the returned time.var_pair
 KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 kable(head(KNZ_rankshift))
 
-## ---- error = TRUE-------------------------------------------------------
+## ---- error = TRUE------------------------------------------------------------
 KNZ_rankshift_agg <- rank_shift(df = collins08,
                         time.var = "year",
                         species.var = "species",
                         abundance.var = "abundance")
 
-## ----fig.width = 7, fig.height = 4---------------------------------------
+## ----fig.width = 7, fig.height = 4--------------------------------------------
 # Create a column with the final year from the returned time.var_pair
 KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6, 9))
 
@@ -116,21 +116,21 @@ KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6, 9))
 ggplot(KNZ_rankshift, aes(year, MRS, color=replicate)) + 
   geom_line(size= 2) + theme_bw() 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
     rate.res <- rate_change(collins08,  
                     time.var= "year", 
                     species.var= "species", 
                     abundance.var= "abundance", 
                     replicate.var = "replicate")
 
-## ---- echo = F-----------------------------------------------------------
+## ---- echo = F----------------------------------------------------------------
 rownames(rate.res) = NULL
 
-## ---- fig.width = 7, fig.height = 5--------------------------------------
+## ---- fig.width = 7, fig.height = 5-------------------------------------------
 kable(rate.res)
 
 
-## ---- fig.width = 7, fig.height = 5--------------------------------------
+## ---- fig.width = 7, fig.height = 5-------------------------------------------
 
 #Use the rate_change_interval function to generate the full data frame of distances by time lag intervals
 comm.res <- rate_change_interval(collins08, 
