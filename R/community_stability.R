@@ -13,15 +13,13 @@
 #'   unless a replication column is specified in the input data frame. If
 #'   replication is specified, the function returns a data frame with the
 #'   following columns:
-#' \itemize{
-#'  \item{stability: }{A numeric column with the stability values.}
-#'  \item{replicate.var: }{A column that shares the same name and type as the
-#'  replicate.var column in the input data frame.}
-#' }
+#'  - **stability**: A numeric column with the stability values.
+#'  - **replicate.var**: A column that shares the same name and type as the
+#'  replicate.var column in the input data frame.
 #' 
 #' @details
-#' The input data frame needs to contain columns for time, species and
-#' abundance; time.var, species.var and abundance.var are used to indicate which
+#' The input data frame needs to contain columns for time and
+#' abundance; time.var and abundance.var are used to indicate which
 #' columns contain those variables. If multiple replicates are included in the
 #' data frame, that column should be specified with replicate.var. Each
 #' replicate should reflect a single experimental unit - there should be a

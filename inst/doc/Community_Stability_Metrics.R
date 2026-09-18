@@ -25,33 +25,33 @@ KNZ_A1_stability <- community_stability(df = subset(knz_001d, subplot=="A_1"),
 KNZ_A1_stability
 
 ## ----results='asis', eval=FALSE-----------------------------------------------
-#  KNZ_variance_ratio <- variance_ratio(df = knz_001d,
-#                                     species.var = "species",
-#                                     time.var = "year",
-#                                     abundance.var = "abundance",
-#                                     bootnumber = 10,
-#                                     replicate.var = "subplot")
-#  
-#  kable(KNZ_variance_ratio)
+# KNZ_variance_ratio <- variance_ratio(df = knz_001d,
+#                                    species.var = "species",
+#                                    time.var = "year",
+#                                    abundance.var = "abundance",
+#                                    bootnumber = 10,
+#                                    replicate.var = "subplot")
+# 
+# kable(KNZ_variance_ratio)
 
 ## ----results='asis', eval=FALSE-----------------------------------------------
-#  KNZ_variance_ratio_avgrep <- variance_ratio(knz_001d,
-#                                            time.var = "year",
-#                                            species.var = "species",
-#                                            abundance.var = "abundance",
-#                                            bootnumber = 10,
-#                                            replicate.var = "subplot",
-#                                            average.replicates = FALSE)
-#  
-#  kable(head(KNZ_variance_ratio_avgrep))
+# KNZ_variance_ratio_avgrep <- variance_ratio(knz_001d,
+#                                           time.var = "year",
+#                                           species.var = "species",
+#                                           abundance.var = "abundance",
+#                                           bootnumber = 10,
+#                                           replicate.var = "subplot",
+#                                           average.replicates = FALSE)
+# 
+# kable(head(KNZ_variance_ratio_avgrep))
 
 ## ----results='asis', eval=FALSE-----------------------------------------------
-#  KNZ_A1_variance_ratio <- variance_ratio(df = subset(knz_001d, subplot=="A_1"),
-#                                        time.var = "year",
-#                                        species.var = "species",
-#                                        abundance.var = "abundance",
-#                                        bootnumber = 10)
-#  kable(KNZ_A1_variance_ratio)
+# KNZ_A1_variance_ratio <- variance_ratio(df = subset(knz_001d, subplot=="A_1"),
+#                                       time.var = "year",
+#                                       species.var = "species",
+#                                       abundance.var = "abundance",
+#                                       bootnumber = 10)
+# kable(KNZ_A1_variance_ratio)
 
 ## ----results='asis'-----------------------------------------------------------
 KNZ_synchrony_Loreau <- synchrony(df = knz_001d, 

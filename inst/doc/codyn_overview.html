@@ -12,78 +12,60 @@
 
 <meta name="author" content="Lauren M. Hallett, Sydney K. Jones, Andrew A. MacDonald, Matthew B. Jones, Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins" />
 
-<meta name="date" content="2020-11-30" />
+<meta name="date" content="2026-09-17" />
 
 <title>codyn: Community Dynamic Metrics</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+
 <style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
 </style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
 
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
 
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
 
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
+
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
 
-
-
-
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
 
 <style type="text/css">body {
 background-color: #fff;
@@ -278,40 +260,98 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">codyn: Community Dynamic Metrics</h1>
-<h4 class="author">Lauren M. Hallett, Sydney K. Jones, Andrew A. MacDonald, Matthew B. Jones, Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins</h4>
-<h4 class="date">2020-11-30</h4>
+<h4 class="author">Lauren M. Hallett, Sydney K. Jones, Andrew A.
+MacDonald, Matthew B. Jones, Dan F. B. Flynn, Peter Slaughter, Corinna
+Gries, Scott L. Collins</h4>
+<h4 class="date">2026-09-17</h4>
 
 
 
-<p>##Overview As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. The package <code>codyn</code> includes recently developed metrics of ecological community dynamics. Functions in <code>codyn</code> implement metrics that are explicitly temporal, and include the option to calculate them over multiple replicates. Functions fall into two categories: temporal diversity indices and community stability metrics.</p>
-<p>##Temporal Diversity Indices Many traditional measure of community structure represent a ‘snapshot in time’ whereas ecological communities are dynamic and many are experiencing directional change with time. The diversity indices in <code>codyn</code> are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include:</p>
+<p>##Overview As long-term datasets increase in scope and length, new
+analytical tools are being developed to capture patterns of species
+interactions over time. The package <code>codyn</code> includes recently
+developed metrics of ecological community dynamics. Functions in
+<code>codyn</code> implement metrics that are explicitly temporal, and
+include the option to calculate them over multiple replicates. Functions
+fall into two categories: temporal diversity indices and community
+stability metrics.</p>
+<p>##Temporal Diversity Indices Many traditional measure of community
+structure represent a ‘snapshot in time’ whereas ecological communities
+are dynamic and many are experiencing directional change with time. The
+diversity indices in <code>codyn</code> are temporal analogs to
+traditional diversity indices such as richness and rank-abundance
+curves. They include:</p>
 <ul>
-<li><p><code>turnover</code> calculates total turnover as well as the proportion of species that either appear or disappear between timepoints.</p></li>
-<li><p><code>mean_rank_shift</code> quantifies relative changes in species rank abundances by taking the sum difference of species ranks in consecutive time points. This metric goes hand-in-hand with “rank clocks,” a useful visualization tool for shifts in species ranks.</p></li>
-<li><p><code>rate_change</code> analyzes differences in species composition between samples at increasing time lags. It reflects the rate of directional change in community composition.</p></li>
-<li><p><code>rate_change_interval</code> produces a data frame containing differences in species composition between samples at increasing time intervals.</p></li>
+<li><p><code>turnover</code> calculates total turnover as well as the
+proportion of species that either appear or disappear between
+timepoints.</p></li>
+<li><p><code>mean_rank_shift</code> quantifies relative changes in
+species rank abundances by taking the sum difference of species ranks in
+consecutive time points. This metric goes hand-in-hand with “rank
+clocks,” a useful visualization tool for shifts in species
+ranks.</p></li>
+<li><p><code>rate_change</code> analyzes differences in species
+composition between samples at increasing time lags. It reflects the
+rate of directional change in community composition.</p></li>
+<li><p><code>rate_change_interval</code> produces a data frame
+containing differences in species composition between samples at
+increasing time intervals.</p></li>
 </ul>
-<p>##Community Stability Metrics Ecologists have long debated the relationship between species diversity and stability. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remains relatively stable. <code>codyn</code> includes a function to characterize community stability, <code>community_stability</code>, and three metrics to characterize species covariance and asynchrony:</p>
+<p>##Community Stability Metrics Ecologists have long debated the
+relationship between species diversity and stability. Unstable species
+populations may stabilize aggregate community properties if a decrease
+in one species is compensated for by an increase in another. In a time
+series, this should be reflected by a pattern in which species
+negatively covary or fluctuate asynchronously while total community
+stability remains relatively stable. <code>codyn</code> includes a
+function to characterize community stability,
+<code>community_stability</code>, and three metrics to characterize
+species covariance and asynchrony:</p>
 <ul>
-<li><p><code>variance_ratio</code> characterizes species covariance <span class="citation">(Schluter 1984; Houlahan et al. 2007)</span>, and includes a null-modeling approach to test significance <span class="citation">(Hallett et al. 2014)</span>. Null modeling is built-in to the <code>variance_ratio</code> function. Two additional functions, <code>cyclic_shift</code> and <code>confint.cyclic_shift</code>, allow this method to be generalized to other test statistics.</p></li>
-<li><p><code>synchrony</code> has two options. The first compares the variance of the aggregated community with the variance of individual components <span class="citation">(Loreau and Mazancourt 2008)</span>. The second compares the average correlation of each individual species with the rest of the aggregated community <span class="citation">(Gross et al. 2014)</span>.</p></li>
+<li><p><code>variance_ratio</code> characterizes species covariance
+<span class="citation">(Schluter 1984; <span class="nocase">Houlahan et
+al.</span> 2007)</span>, and includes a null-modeling approach to test
+significance <span class="citation">(Hallett et al. 2014)</span>. Null
+modeling is built-in to the <code>variance_ratio</code> function. Two
+additional functions, <code>cyclic_shift</code> and
+<code>confint.cyclic_shift</code>, allow this method to be generalized
+to other test statistics.</p></li>
+<li><p><code>synchrony</code> has two options. The first compares the
+variance of the aggregated community with the variance of individual
+components <span class="citation">(Loreau and Mazancourt 2008)</span>.
+The second compares the average correlation of each individual species
+with the rest of the aggregated community <span class="citation">(Gross
+et al. 2014)</span>.</p></li>
 </ul>
 <p>##Citations</p>
-<div id="refs" class="references">
-<div id="ref-gross2014">
-<p>Gross, Kevin, Bradley J. Cardinale, Jeremy W. Fox, Andrew Gonzalez, Michel Loreau, H. Wayne Polley, Peter B. Reich, and Jasper van Ruijven. 2014. “Species Richness and the Temporal Stability of Biomass Production: A New Analysis of Recent Biodiversity Experiments.” <em>The American Naturalist</em> 183 (1): 1–12. <a href="https://doi.org/10.1086/673915">https://doi.org/10.1086/673915</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-gross2014" class="csl-entry">
+Gross, Kevin, Bradley J. Cardinale, Jeremy W. Fox, et al. 2014.
+<span>“Species Richness and the Temporal Stability of Biomass
+Production: <span>A</span> New Analysis of Recent Biodiversity
+Experiments.”</span> <em>The American Naturalist</em> 183 (1): 1–12. <a href="https://doi.org/10.1086/673915">https://doi.org/10.1086/673915</a>.
 </div>
-<div id="ref-hallett2014">
-<p>Hallett, Lauren M., Joanna S. Hsu, Elsa E. Cleland, Scott L. Collins, Timothy L. Dickson, Emily C. Farrer, Laureano A. Gherardi, et al. 2014. “Biotic Mechanisms of Community Stability Shift Along a Precipitation Gradient.” <em>Ecology</em> 95 (6): 1693–1700. <a href="https://doi.org/10.1890/13-0895.1">https://doi.org/10.1890/13-0895.1</a>.</p>
+<div id="ref-hallett2014" class="csl-entry">
+Hallett, Lauren M., Joanna S. Hsu, Elsa E. Cleland, et al. 2014.
+<span>“Biotic Mechanisms of Community Stability Shift Along a
+Precipitation Gradient.”</span> <em>Ecology</em> 95 (6): 1693–700. <a href="https://doi.org/10.1890/13-0895.1">https://doi.org/10.1890/13-0895.1</a>.
 </div>
-<div id="ref-houlahan2007">
-<p>Houlahan, J. E., D. J. Currie, K. Cottenie, G. S. Cumming, S. K. M. Ernest, C. S. Findlay, S. D. Fuhlendorf, et al. 2007. “Compensatory Dynamics Are Rare in Natural Ecological Communities.” <em>Proceedings of the National Academy of Sciences</em> 104 (9): 3273–7. <a href="https://doi.org/10.1073/pnas.0603798104">https://doi.org/10.1073/pnas.0603798104</a>.</p>
+<div id="ref-houlahan2007" class="csl-entry">
+<span class="nocase">Houlahan, J. E., D. J. Currie, K. Cottenie, et
+al.</span> 2007. <span>“Compensatory Dynamics Are Rare in Natural
+Ecological Communities.”</span> <em>Proceedings of the National Academy
+of Sciences</em> 104 (9): 3273–77. <a href="https://doi.org/10.1073/pnas.0603798104">https://doi.org/10.1073/pnas.0603798104</a>.
 </div>
-<div id="ref-loreau2008">
-<p>Loreau, Michel, and Claire de Mazancourt. 2008. “Species Synchrony and Its Drivers: Neutral and Nonneutral Community Dynamics in Fluctuating Environments.” <em>The American Naturalist</em> 172 (2): E48–E66. <a href="https://doi.org/10.1086/589746">https://doi.org/10.1086/589746</a>.</p>
+<div id="ref-loreau2008" class="csl-entry">
+Loreau, Michel, and Claire de Mazancourt. 2008. <span>“Species Synchrony
+and Its Drivers: <span>Neutral</span> and Nonneutral Community Dynamics
+in Fluctuating Environments.”</span> <em>The American Naturalist</em>
+172 (2): E48–66. <a href="https://doi.org/10.1086/589746">https://doi.org/10.1086/589746</a>.
 </div>
-<div id="ref-schluter1984">
-<p>Schluter, Dolph. 1984. “A Variance Test for Detecting Species Associations, with Some Example Applications.” <em>Ecology</em> 65 (3): 998–1005. <a href="https://doi.org/10.2307/1938071">https://doi.org/10.2307/1938071</a>.</p>
+<div id="ref-schluter1984" class="csl-entry">
+Schluter, Dolph. 1984. <span>“A Variance Test for Detecting Species
+Associations, with Some Example Applications.”</span> <em>Ecology</em>
+65 (3): 998–1005. <a href="https://doi.org/10.2307/1938071">https://doi.org/10.2307/1938071</a>.
 </div>
 </div>
 

@@ -1,6 +1,6 @@
 Package: codyn
 Title: Community Dynamics Metrics
-Version: 2.0.5
+Version: 2.0.6
 Authors@R: c(person("Lauren", "Hallett", email="lauren.m.hallett@gmail.com", role=c("aut"), comment=c(ORCID = "0000-0002-0718-0257")),
     person("Meghan L.", "Avolio", email="meghan.avolio@jhu.edu", role=c("aut"), comment=c(ORCID = "0000-0002-2649-9159")),
     person("Ian T.", "Carroll", email="carroll.ian@gmail.com", role=c("aut"), comment=c(ORCID = "0000-0002-3616-810X")),
@@ -12,7 +12,7 @@ Authors@R: c(person("Lauren", "Hallett", email="lauren.m.hallett@gmail.com", rol
     person("Scott L.", "Collins", email="scollins@sevilleta.unm.edu", role=c("aut"), comment=c(ORCID = "0000-0002-0193-2892")),
     person("Corinna", "Gries", email="cgries@wisc.edu", role=c("aut"), comment=c(ORCID = "0000-0002-9091-6543")),
     person("Matthew B.", "Jones", email="jones@nceas.ucsb.edu", role=c("aut", "cre"), comment=c(ORCID = "0000-0003-0077-4738")))
-Date: 2020-11-30
+Date: 2026-09-17
 Description: Univariate and multivariate temporal and spatial diversity indices, 
     rank abundance curves, and community stability measures. The functions 
     implement measures that are either explicitly temporal and include the 
@@ -31,27 +31,29 @@ Description: Univariate and multivariate temporal and spatial diversity indices,
 Depends: R (>= 3.2.0)
 Imports: assertthat, stats, permute, vegan
 Suggests: testthat, knitr, ggplot2, pillar, reshape2, devtools, dplyr,
-        rmarkdown
+        rmarkdown, spelling
 Encoding: UTF-8
 License: Apache License (== 2.0)
 URL: https://github.com/NCEAS/codyn/
 BugReports: https://github.com/NCEAS/codyn/issues
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+Config/roxygen2/version: 8.1.0
 NeedsCompilation: no
-Packaged: 2020-12-01 03:16:55 UTC; jones
-Author: Lauren Hallett [aut] (<https://orcid.org/0000-0002-0718-0257>),
-  Meghan L. Avolio [aut] (<https://orcid.org/0000-0002-2649-9159>),
-  Ian T. Carroll [aut] (<https://orcid.org/0000-0002-3616-810X>),
+Packaged: 2026-09-18 03:48:04 UTC; jones
+Author: Lauren Hallett [aut] (ORCID: <https://orcid.org/0000-0002-0718-0257>),
+  Meghan L. Avolio [aut] (ORCID: <https://orcid.org/0000-0002-2649-9159>),
+  Ian T. Carroll [aut] (ORCID: <https://orcid.org/0000-0002-3616-810X>),
   Sydney K. Jones [aut],
-  A. Andrew M. MacDonald [aut] (<https://orcid.org/0000-0003-1162-169X>),
-  Dan F. B. Flynn [aut] (<https://orcid.org/0000-0002-2978-5257>),
-  Peter Slaughter [aut] (<https://orcid.org/0000-0002-2192-403X>),
-  Julie Ripplinger [aut] (<https://orcid.org/0000-0002-2771-6637>),
-  Scott L. Collins [aut] (<https://orcid.org/0000-0002-0193-2892>),
-  Corinna Gries [aut] (<https://orcid.org/0000-0002-9091-6543>),
-  Matthew B. Jones [aut, cre] (<https://orcid.org/0000-0003-0077-4738>)
+  A. Andrew M. MacDonald [aut] (ORCID:
+    <https://orcid.org/0000-0003-1162-169X>),
+  Dan F. B. Flynn [aut] (ORCID: <https://orcid.org/0000-0002-2978-5257>),
+  Peter Slaughter [aut] (ORCID: <https://orcid.org/0000-0002-2192-403X>),
+  Julie Ripplinger [aut] (ORCID: <https://orcid.org/0000-0002-2771-6637>),
+  Scott L. Collins [aut] (ORCID: <https://orcid.org/0000-0002-0193-2892>),
+  Corinna Gries [aut] (ORCID: <https://orcid.org/0000-0002-9091-6543>),
+  Matthew B. Jones [aut, cre] (ORCID:
+    <https://orcid.org/0000-0003-0077-4738>)
 Maintainer: Matthew B. Jones <jones@nceas.ucsb.edu>
 Repository: CRAN
-Date/Publication: 2020-12-01 07:40:06 UTC
+Date/Publication: 2026-09-18 04:00:02 UTC

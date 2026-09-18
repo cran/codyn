@@ -12,142 +12,108 @@
 
 <meta name="author" content="Lauren M. Hallett" />
 
-<meta name="date" content="2020-11-30" />
+<meta name="date" content="2026-09-17" />
 
 <title>Community Stability Metrics</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+
 <style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
 </style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
 
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-
-<style type="text/css">code{white-space: pre;}</style>
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -156,13 +122,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -172,6 +145,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </script>
 
 
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
 
 <style type="text/css">body {
 background-color: #fff;
@@ -367,26 +363,50 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Community Stability Metrics</h1>
 <h4 class="author">Lauren M. Hallett</h4>
-<h4 class="date">2020-11-30</h4>
+<h4 class="date">2026-09-17</h4>
 
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Ecologists have long debated the relationship between species diversity and stability. One key question in this debate is how the individual components of a community (e.g., species in species-rich communities) affect the stability of aggregate properties of the whole community (e.g., biomass production). It is increasingly recognized that unstable species populations may still maintain stable community productivity if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remained relatively stable.</p>
-<p><code>codyn</code> includes a function to characterize community stability, <code>community_stability</code>, and three metrics to characterize species covariance and asynchrony:</p>
+<p>Ecologists have long debated the relationship between species
+diversity and stability. One key question in this debate is how the
+individual components of a community (e.g., species in species-rich
+communities) affect the stability of aggregate properties of the whole
+community (e.g., biomass production). It is increasingly recognized that
+unstable species populations may still maintain stable community
+productivity if a decrease in one species is compensated for by an
+increase in another. In a time series, this should be reflected by a
+pattern in which species negatively covary or fluctuate asynchronously
+while total community stability remained relatively stable.</p>
+<p><code>codyn</code> includes a function to characterize community
+stability, <code>community_stability</code>, and three metrics to
+characterize species covariance and asynchrony:</p>
 <ul>
-<li><p><code>variance_ratio</code> characterizes species covariance <span class="citation">(Schluter 1984; Houlahan et al. 2007)</span>, and includes a null-modeling approach to test significance <span class="citation">(Hallett et al. 2014)</span>.</p></li>
-<li><p><code>synchrony</code> has two options. The first compares the variance of the aggregated community with the variance of individual components <span class="citation">(Loreau and Mazancourt 2008)</span>. The second compares the average correlation of each individual species with the rest of the aggregated community <span class="citation">(Gross et al. 2014)</span>.</p></li>
+<li><p><code>variance_ratio</code> characterizes species covariance
+<span class="citation">(Schluter 1984; <span class="nocase">Houlahan et
+al.</span> 2007)</span>, and includes a null-modeling approach to test
+significance <span class="citation">(Hallett et al.
+2014)</span>.</p></li>
+<li><p><code>synchrony</code> has two options. The first compares the
+variance of the aggregated community with the variance of individual
+components <span class="citation">(Loreau and Mazancourt 2008)</span>.
+The second compares the average correlation of each individual species
+with the rest of the aggregated community <span class="citation">(Gross
+et al. 2014)</span>.</p></li>
 </ul>
 </div>
 <div id="example-dataset" class="section level2">
 <h2>Example dataset</h2>
-<p>To illustrate each function, <code>codyn</code> uses a dataset of plant composition from an annually burned watershed at the Konza Prairie Long-Term Ecological Research site in Manhattan, KS. The <code>knz_001d</code> dataset spans 24 years and includes 20 replicate subplots.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(codyn)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(knitr)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">data</span>(knz_001d)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">kable</span>(<span class="kw">head</span>(knz_001d))</span></code></pre></div>
+<p>To illustrate each function, <code>codyn</code> uses a dataset of
+plant composition from an annually burned watershed at the Konza Prairie
+Long-Term Ecological Research site in Manhattan, KS. The
+<code>knz_001d</code> dataset spans 24 years and includes 20 replicate
+subplots.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(codyn)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">data</span>(knz_001d)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(knz_001d))</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -438,12 +458,18 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="community-stability" class="section level2">
 <h2>Community stability</h2>
-<p>The <code>community_stability</code> function aggregates species abundances within replicate and time period, and uses these values to calculate community stability as the temporal mean divided by the temporal standard deviation <span class="citation">(Tilman 1999)</span>. It includes an optional argument to calculate community stability across multiple replicates, which returns a data frame with the name of the replicate column and the stability value.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>KNZ_stability &lt;-<span class="st"> </span><span class="kw">community_stability</span>(knz_001d, </span>
-<span id="cb2-2"><a href="#cb2-2"></a>                                   <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb2-3"><a href="#cb2-3"></a>                                   <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
-<span id="cb2-4"><a href="#cb2-4"></a>                                   <span class="dt">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">kable</span>(<span class="kw">head</span>(KNZ_stability))</span></code></pre></div>
+<p>The <code>community_stability</code> function aggregates species
+abundances within replicate and time period, and uses these values to
+calculate community stability as the temporal mean divided by the
+temporal standard deviation <span class="citation">(Tilman 1999)</span>.
+It includes an optional argument to calculate community stability across
+multiple replicates, which returns a data frame with the name of the
+replicate column and the stability value.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>KNZ_stability <span class="ot">&lt;-</span> <span class="fu">community_stability</span>(knz_001d, </span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                                   <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                                   <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                                   <span class="at">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(KNZ_stability))</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -478,11 +504,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>If <code>replicate.var</code> is left as <code>NA</code>, the function will aggregate all values within a time period and return an integer value.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>KNZ_A1_stability &lt;-<span class="st"> </span><span class="kw">community_stability</span>(<span class="dt">df =</span> <span class="kw">subset</span>(knz_001d, subplot<span class="op">==</span><span class="st">&quot;A_1&quot;</span>),  </span>
-<span id="cb3-2"><a href="#cb3-2"></a>                                      <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb3-3"><a href="#cb3-3"></a>                                      <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>KNZ_A1_stability</span></code></pre></div>
+<p>If <code>replicate.var</code> is left as <code>NA</code>, the
+function will aggregate all values within a time period and return an
+integer value.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>KNZ_A1_stability <span class="ot">&lt;-</span> <span class="fu">community_stability</span>(<span class="at">df =</span> <span class="fu">subset</span>(knz_001d, subplot<span class="sc">==</span><span class="st">&quot;A_1&quot;</span>),  </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                                      <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                                      <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>KNZ_A1_stability</span></code></pre></div>
 <p>[1] 4.12</p>
 </div>
 <div id="species-covariance" class="section level2">
@@ -491,57 +519,112 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Variance ratio</h3>
 <div id="calculating-the-variance-ratio" class="section level4">
 <h4>Calculating the variance ratio</h4>
-<p>The variance ratio was one of the first metrics to characterize patterns of species covariance <span class="citation">(Schluter 1984)</span> and was used in an early synthesis paper of species covariance in long time series <span class="citation">(Houlahan et al. 2007)</span>. The metric compares the variance of the community (<span class="math inline">\(C\)</span>) as a whole relative to the sum of the individual population (<span class="math inline">\(x_i\)</span>) variances:</p>
-<p><span class="math display">\[ VR = \frac{Var(C)}{\sum_{i}^{N} Var(x_i)} \]</span></p>
+<p>The variance ratio was one of the first metrics to characterize
+patterns of species covariance <span class="citation">(Schluter
+1984)</span> and was used in an early synthesis paper of species
+covariance in long time series <span class="citation">(<span class="nocase">Houlahan et al.</span> 2007)</span>. The metric compares
+the variance of the community (<span class="math inline">\(C\)</span>)
+as a whole relative to the sum of the individual population (<span class="math inline">\(x_i\)</span>) variances:</p>
+<p><span class="math display">\[ VR = \frac{Var(C)}{\sum_{i}^{N}
+Var(x_i)} \]</span></p>
 <p>where:</p>
-<p><span class="math display">\[ Var(C)  = \sum_{i = 1}^{N} Var(x_i) + 2\left(\sum_{i = 1}^{N - 1} \sum_{j = i + 1}^{N} Covar(x_i, x_j)\right) \]</span></p>
-<p>If species vary independently then the variance ratio will be close to 1. A variance ratio &lt; 1 indicates predominately negative species covariance, whereas a variance ratio &gt; 1 indicates that species generally positively covary.</p>
+<p><span class="math display">\[ Var(C)  = \sum_{i = 1}^{N} Var(x_i) +
+2\left(\sum_{i = 1}^{N - 1} \sum_{j = i + 1}^{N} Covar(x_i, x_j)\right)
+\]</span></p>
+<p>If species vary independently then the variance ratio will be close
+to 1. A variance ratio &lt; 1 indicates predominately negative species
+covariance, whereas a variance ratio &gt; 1 indicates that species
+generally positively covary.</p>
 </div>
 <div id="significance-testing" class="section level4">
 <h4>Significance testing</h4>
-<p>The variance ratio remains widely used but has been subject to a number of criticisms. Importantly, early uses of the variance ratio either did not include significance tests, or tested significance by comparing observed values to those returned by scrambling each species’ time series. Null models using fully-scrambled species time series can generate spurious null expectations of covariance because the process disrupts within-species autocorrelation. Phase-scrambling <span class="citation">(Grman et al. 2010)</span> and cyclic shifts <span class="citation">(Hallett et al. 2014; adapted from Harms et al. 2001)</span> have been used to address this issue.</p>
-<p><code>variance_ratio</code> uses a cyclic shift permutations to conduct null modeling for significance tests. In this method a starting time point is randomly selected for each species’ time series. This generates a null community matrix in which species abundances vary independently but within-species autocorrelation is maintained (for each species, the time series is disrupted only once).</p>
-<p>If a replicate column is specified, the default <code>variance_ratio</code> setting calculates a null variance ratio for each replicate in the dataset, averages these values, and repeats as many times as specified by <code>bootnumber</code>. This vector of averaged, null variance ratios is then sampled for lower and upper confidence intervals, which are returned along with the average observed variance ratio.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>KNZ_variance_ratio &lt;-<span class="st"> </span><span class="kw">variance_ratio</span>(<span class="dt">df =</span> knz_001d, </span>
-<span id="cb4-2"><a href="#cb4-2"></a>                                   <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>, </span>
-<span id="cb4-3"><a href="#cb4-3"></a>                                   <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb4-4"><a href="#cb4-4"></a>                                   <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
-<span id="cb4-5"><a href="#cb4-5"></a>                                   <span class="dt">bootnumber =</span> <span class="dv">10</span>, </span>
-<span id="cb4-6"><a href="#cb4-6"></a>                                   <span class="dt">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">kable</span>(KNZ_variance_ratio)</span></code></pre></div>
-<p>Alternatively, if a replicate column is specified and <code>average.replicates</code> is set to <code>FALSE</code>, the function will return a vector of null variance ratios for each replicate in the dataset, and return the subsequent confidence intervals and observed variance ratios for each replicate.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>KNZ_variance_ratio_avgrep &lt;-<span class="st"> </span><span class="kw">variance_ratio</span>(knz_001d, </span>
-<span id="cb5-2"><a href="#cb5-2"></a>                                          <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3"></a>                                          <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>,</span>
-<span id="cb5-4"><a href="#cb5-4"></a>                                          <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>,  </span>
-<span id="cb5-5"><a href="#cb5-5"></a>                                          <span class="dt">bootnumber =</span> <span class="dv">10</span>, </span>
-<span id="cb5-6"><a href="#cb5-6"></a>                                          <span class="dt">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>, </span>
-<span id="cb5-7"><a href="#cb5-7"></a>                                          <span class="dt">average.replicates =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="kw">kable</span>(<span class="kw">head</span>(KNZ_variance_ratio_avgrep))</span></code></pre></div>
-<p>If <code>replicate.var</code> is left as <code>NA</code> the function assumes that there is a single observation for each species within a given time period.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>KNZ_A1_variance_ratio &lt;-<span class="st"> </span><span class="kw">variance_ratio</span>(<span class="dt">df =</span> <span class="kw">subset</span>(knz_001d, subplot<span class="op">==</span><span class="st">&quot;A_1&quot;</span>), </span>
-<span id="cb6-2"><a href="#cb6-2"></a>                                      <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb6-3"><a href="#cb6-3"></a>                                      <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>,  </span>
-<span id="cb6-4"><a href="#cb6-4"></a>                                      <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>,  </span>
-<span id="cb6-5"><a href="#cb6-5"></a>                                      <span class="dt">bootnumber =</span> <span class="dv">10</span>) </span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">kable</span>(KNZ_A1_variance_ratio)</span></code></pre></div>
+<p>The variance ratio remains widely used but has been subject to a
+number of criticisms. Importantly, early uses of the variance ratio
+either did not include significance tests, or tested significance by
+comparing observed values to those returned by scrambling each species’
+time series. Null models using fully-scrambled species time series can
+generate spurious null expectations of covariance because the process
+disrupts within-species autocorrelation. Phase-scrambling <span class="citation">(Grman et al. 2010)</span> and cyclic shifts <span class="citation">(Hallett et al. 2014; adapted from Harms et al.
+2001)</span> have been used to address this issue.</p>
+<p><code>variance_ratio</code> uses a cyclic shift permutations to
+conduct null modeling for significance tests. In this method a starting
+time point is randomly selected for each species’ time series. This
+generates a null community matrix in which species abundances vary
+independently but within-species autocorrelation is maintained (for each
+species, the time series is disrupted only once).</p>
+<p>If a replicate column is specified, the default
+<code>variance_ratio</code> setting calculates a null variance ratio for
+each replicate in the dataset, averages these values, and repeats as
+many times as specified by <code>bootnumber</code>. This vector of
+averaged, null variance ratios is then sampled for lower and upper
+confidence intervals, which are returned along with the average observed
+variance ratio.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>KNZ_variance_ratio <span class="ot">&lt;-</span> <span class="fu">variance_ratio</span>(<span class="at">df =</span> knz_001d, </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                                   <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                                   <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                                   <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>                                   <span class="at">bootnumber =</span> <span class="dv">10</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>                                   <span class="at">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="fu">kable</span>(KNZ_variance_ratio)</span></code></pre></div>
+<p>Alternatively, if a replicate column is specified and
+<code>average.replicates</code> is set to <code>FALSE</code>, the
+function will return a vector of null variance ratios for each replicate
+in the dataset, and return the subsequent confidence intervals and
+observed variance ratios for each replicate.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>KNZ_variance_ratio_avgrep <span class="ot">&lt;-</span> <span class="fu">variance_ratio</span>(knz_001d, </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                          <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                                          <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                                          <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>,  </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                                          <span class="at">bootnumber =</span> <span class="dv">10</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                                          <span class="at">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>                                          <span class="at">average.replicates =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(KNZ_variance_ratio_avgrep))</span></code></pre></div>
+<p>If <code>replicate.var</code> is left as <code>NA</code> the function
+assumes that there is a single observation for each species within a
+given time period.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>KNZ_A1_variance_ratio <span class="ot">&lt;-</span> <span class="fu">variance_ratio</span>(<span class="at">df =</span> <span class="fu">subset</span>(knz_001d, subplot<span class="sc">==</span><span class="st">&quot;A_1&quot;</span>), </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                                      <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                                      <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>,  </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                                      <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>,  </span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                                      <span class="at">bootnumber =</span> <span class="dv">10</span>) </span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">kable</span>(KNZ_A1_variance_ratio)</span></code></pre></div>
 </div>
 <div id="general-cyclic-shift-function" class="section level4">
 <h4>General cyclic shift function</h4>
-<p><code>codyn</code> also includes the option to apply a cyclic shift permutation on other test statistics:</p>
+<p><code>codyn</code> also includes the option to apply a cyclic shift
+permutation on other test statistics:</p>
 <ul>
-<li><code>cyclic_shift</code> returns an S3 object of test statistics from a user-specified function when applied to a null community generated via a cyclic shift permutation. It requires a dataframe with a <code>species.var</code>, <code>time.var</code> and <code>abundance.var</code> column, and optional <code>replicate.var</code> column. The user-specified function should operate on a community matrix (e.g., <code>cov</code>).</li>
+<li><code>cyclic_shift</code> returns an S3 object of test statistics
+from a user-specified function when applied to a null community
+generated via a cyclic shift permutation. It requires a dataframe with a
+<code>species.var</code>, <code>time.var</code> and
+<code>abundance.var</code> column, and optional
+<code>replicate.var</code> column. The user-specified function should
+operate on a community matrix (e.g., <code>cov</code>).</li>
 </ul>
-<p>The length of the “out” parameter in the object is the number of null iterations as specified by <code>bootnumber</code>). If multiple replicates are specified, null values are averaged among replicates for each iteration, but a different cyclic shift permutation is applied to each replicate within an iteration.</p>
+<p>The length of the “out” parameter in the object is the number of null
+iterations as specified by <code>bootnumber</code>). If multiple
+replicates are specified, null values are averaged among replicates for
+each iteration, but a different cyclic shift permutation is applied to
+each replicate within an iteration.</p>
 <ul>
-<li><code>confint</code> returns the confidence intervals from the S3 object produced by <code>cyclic_shift</code>.</li>
+<li><code>confint</code> returns the confidence intervals from the S3
+object produced by <code>cyclic_shift</code>.</li>
 </ul>
 </div>
 <div id="variance-ratio-and-species-richness" class="section level4">
 <h4>Variance ratio and species richness</h4>
-<p>A second criticism of the variance ratio is that it is sensitive to species richness. This is a particular concern when the metric is used to compare communities that have different levels of species richness. The most conservative approach is to restrict use of the variance ratio to two-species communities <span class="citation">(Hector et al. 2010)</span>. Comparing the effect size of the observed versus null variance ratio can also account for richness differences between communities. Two alternative metrics that quantify species asynchrony have been developed in part to respond to this issue.</p>
+<p>A second criticism of the variance ratio is that it is sensitive to
+species richness. This is a particular concern when the metric is used
+to compare communities that have different levels of species richness.
+The most conservative approach is to restrict use of the variance ratio
+to two-species communities <span class="citation">(<span class="nocase">Hector et al.</span> 2010)</span>. Comparing the effect
+size of the observed versus null variance ratio can also account for
+richness differences between communities. Two alternative metrics that
+quantify species asynchrony have been developed in part to respond to
+this issue.</p>
 </div>
 </div>
 </div>
@@ -549,18 +632,33 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>Species synchrony</h2>
 <div id="synchrony-option-1-loreau" class="section level3">
 <h3>Synchrony Option 1: “Loreau”</h3>
-<p>Loreau and de Mazancourt (2008) developed a metric of species synchrony that compares the variance of aggregated species abundances with the summed variances of individual species:</p>
-<p><span class="math display">\[ Synchrony = \frac{{\sigma_(x_T)}^{2}}{({\sum_{i} \sigma_(x_i)})^{2}}\]</span></p>
+<p>Loreau and de Mazancourt (2008) developed a metric of species
+synchrony that compares the variance of aggregated species abundances
+with the summed variances of individual species:</p>
+<p><span class="math display">\[ Synchrony =
+\frac{{\sigma_(x_T)}^{2}}{({\sum_{i} \sigma_(x_i)})^{2}}\]</span></p>
 <p>where:</p>
-<p><span class="math display">\[ x_T(t) = {\sum_{i=1}^{N} x_i(t))} \]</span></p>
-<p>This measure of synchrony is standardized between 0 (perfect asynchrony) and 1 (perfect synchrony). A virtue of this metric is that it can be applied across communities of variable species richness. It can also be applied not only to species abundance but also population size and per capita growth rate. However, unlike the variance ratio it does not lend itself to significance testing. In addition, it will return similar values for communities shaped by different processes – for example, even if species vary independently, the synchrony metric may be affected by the number of species and individual species variances <span class="citation">(Gross et al. 2014)</span>.</p>
-<p>In <code>codyn</code>, this is the default metric for the <code>synchrony</code> function and can be easily calculated for multiple replicates in a dataset.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>KNZ_synchrony_Loreau &lt;-<span class="st"> </span><span class="kw">synchrony</span>(<span class="dt">df =</span> knz_001d, </span>
-<span id="cb7-2"><a href="#cb7-2"></a>                         <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb7-3"><a href="#cb7-3"></a>                         <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>, </span>
-<span id="cb7-4"><a href="#cb7-4"></a>                         <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
-<span id="cb7-5"><a href="#cb7-5"></a>                         <span class="dt">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="kw">kable</span>(<span class="kw">head</span>(KNZ_synchrony_Loreau))</span></code></pre></div>
+<p><span class="math display">\[ x_T(t) = {\sum_{i=1}^{N} x_i(t))}
+\]</span></p>
+<p>This measure of synchrony is standardized between 0 (perfect
+asynchrony) and 1 (perfect synchrony). A virtue of this metric is that
+it can be applied across communities of variable species richness. It
+can also be applied not only to species abundance but also population
+size and per capita growth rate. However, unlike the variance ratio it
+does not lend itself to significance testing. In addition, it will
+return similar values for communities shaped by different processes –
+for example, even if species vary independently, the synchrony metric
+may be affected by the number of species and individual species
+variances <span class="citation">(Gross et al. 2014)</span>.</p>
+<p>In <code>codyn</code>, this is the default metric for the
+<code>synchrony</code> function and can be easily calculated for
+multiple replicates in a dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>KNZ_synchrony_Loreau <span class="ot">&lt;-</span> <span class="fu">synchrony</span>(<span class="at">df =</span> knz_001d, </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                         <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                         <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>, </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>                         <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                         <span class="at">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(KNZ_synchrony_Loreau))</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -595,29 +693,45 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>If there are no replicates within the dataset allow the <code>replicate.var</code> argument to default to <code>NA</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>KNZ_A1_synchrony_Loreau &lt;-<span class="st"> </span><span class="kw">synchrony</span>(<span class="dt">df =</span> <span class="kw">subset</span>(knz_001d, subplot<span class="op">==</span><span class="st">&quot;A_1&quot;</span>),</span>
-<span id="cb8-2"><a href="#cb8-2"></a>                            <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb8-3"><a href="#cb8-3"></a>                            <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>, </span>
-<span id="cb8-4"><a href="#cb8-4"></a>                            <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>)</span>
-<span id="cb8-5"><a href="#cb8-5"></a>KNZ_A1_synchrony_Loreau</span></code></pre></div>
+<p>If there are no replicates within the dataset allow the
+<code>replicate.var</code> argument to default to <code>NA</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>KNZ_A1_synchrony_Loreau <span class="ot">&lt;-</span> <span class="fu">synchrony</span>(<span class="at">df =</span> <span class="fu">subset</span>(knz_001d, subplot<span class="sc">==</span><span class="st">&quot;A_1&quot;</span>),</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                            <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                            <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>, </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                            <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>KNZ_A1_synchrony_Loreau</span></code></pre></div>
 <p>[1] 0.114</p>
 </div>
 <div id="synchrony-option-2-gross" class="section level3">
 <h3>Synchrony Option 2: “Gross”</h3>
-<p>Gross et al. (2014) developed a metric of synchrony that compares the average correlation of each individual species with the rest of the aggregated community:</p>
-<p><span class="math display">\[ Synchrony = (1/N){{\sum_{i}Corr(x_i, \sum_{i\neq{j}}{x_j})}}\]</span></p>
-<p>This measure of synchrony is standardized from -1 (perfect asynchrony) to 1 (perfect synchrony) and is centered at 0 when species fluctuate independently. A virtue of this metric is it not sensitive to richness and has the potential for null-model significance testing. It may under-perform on short time series because it is based on correlation, and care should be taken when applying it to communities that contain very stable species (i.e., whose abundances do not change throughout the time series).</p>
-<p>In <code>codyn</code>, this metric is calculated with the <code>Gross</code> option in the <code>synchrony</code> function and can be easily calculated for multiple replicates in a dataset. If a species does not vary over the course of the time series <code>synchrony</code> will issue a warning and will remove that species from the calculation.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>KNZ_synchrony_Gross &lt;-<span class="st"> </span><span class="kw">synchrony</span>(<span class="dt">df =</span> knz_001d, </span>
-<span id="cb9-2"><a href="#cb9-2"></a>                           <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb9-3"><a href="#cb9-3"></a>                           <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>,  </span>
-<span id="cb9-4"><a href="#cb9-4"></a>                           <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
-<span id="cb9-5"><a href="#cb9-5"></a>                           <span class="dt">metric =</span> <span class="st">&quot;Gross&quot;</span>, </span>
-<span id="cb9-6"><a href="#cb9-6"></a>                           <span class="dt">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span></code></pre></div>
+<p>Gross et al. (2014) developed a metric of synchrony that compares the
+average correlation of each individual species with the rest of the
+aggregated community:</p>
+<p><span class="math display">\[ Synchrony = (1/N){{\sum_{i}Corr(x_i,
+\sum_{i\neq{j}}{x_j})}}\]</span></p>
+<p>This measure of synchrony is standardized from -1 (perfect
+asynchrony) to 1 (perfect synchrony) and is centered at 0 when species
+fluctuate independently. A virtue of this metric is it not sensitive to
+richness and has the potential for null-model significance testing. It
+may under-perform on short time series because it is based on
+correlation, and care should be taken when applying it to communities
+that contain very stable species (i.e., whose abundances do not change
+throughout the time series).</p>
+<p>In <code>codyn</code>, this metric is calculated with the
+<code>Gross</code> option in the <code>synchrony</code> function and can
+be easily calculated for multiple replicates in a dataset. If a species
+does not vary over the course of the time series <code>synchrony</code>
+will issue a warning and will remove that species from the
+calculation.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>KNZ_synchrony_Gross <span class="ot">&lt;-</span> <span class="fu">synchrony</span>(<span class="at">df =</span> knz_001d, </span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                           <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                           <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>,  </span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                           <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>                           <span class="at">metric =</span> <span class="st">&quot;Gross&quot;</span>, </span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                           <span class="at">replicate.var =</span> <span class="st">&quot;subplot&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in FUN(X[[i]], ...): One or more species has non-varying abundance
 ## within a subplot and has been omitted</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">kable</span>(<span class="kw">head</span>(KNZ_synchrony_Gross))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(KNZ_synchrony_Gross))</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -652,46 +766,78 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>If there are no replicates within the dataset allow the <code>replicate.var</code> argument to default to <code>NA</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>KNZ_A1_synchrony_Gross &lt;-<span class="st"> </span><span class="kw">synchrony</span>(<span class="dt">df =</span> <span class="kw">subset</span>(knz_001d, subplot<span class="op">==</span><span class="st">&quot;A_1&quot;</span>),</span>
-<span id="cb12-2"><a href="#cb12-2"></a>                              <span class="dt">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb12-3"><a href="#cb12-3"></a>                              <span class="dt">species.var =</span> <span class="st">&quot;species&quot;</span>,  </span>
-<span id="cb12-4"><a href="#cb12-4"></a>                              <span class="dt">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
-<span id="cb12-5"><a href="#cb12-5"></a>                              <span class="dt">metric =</span> <span class="st">&quot;Gross&quot;</span>)</span>
-<span id="cb12-6"><a href="#cb12-6"></a>KNZ_A1_synchrony_Gross</span></code></pre></div>
+<p>If there are no replicates within the dataset allow the
+<code>replicate.var</code> argument to default to <code>NA</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>KNZ_A1_synchrony_Gross <span class="ot">&lt;-</span> <span class="fu">synchrony</span>(<span class="at">df =</span> <span class="fu">subset</span>(knz_001d, subplot<span class="sc">==</span><span class="st">&quot;A_1&quot;</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                              <span class="at">time.var =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                              <span class="at">species.var =</span> <span class="st">&quot;species&quot;</span>,  </span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>                              <span class="at">abundance.var =</span> <span class="st">&quot;abundance&quot;</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>                              <span class="at">metric =</span> <span class="st">&quot;Gross&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>KNZ_A1_synchrony_Gross</span></code></pre></div>
 <p>[1] -0.0194</p>
-<p>###Comparison between “Loreau” and “Gross” Qualititively, the degree to which the synchrony metrics calculated by <code>Loreau</code> versus <code>Gross</code> will differ depends on the abundance distributions of the species in a community. The <code>Loreau</code> method and the variance ratio are both based on variances, and are therefore more heavily influenced by abundant species. In contrast, the <code>Gross</code> method is based on correlation and consequently weights species equally.</p>
+<p>###Comparison between “Loreau” and “Gross” Qualititively, the degree
+to which the synchrony metrics calculated by <code>Loreau</code> versus
+<code>Gross</code> will differ depends on the abundance distributions of
+the species in a community. The <code>Loreau</code> method and the
+variance ratio are both based on variances, and are therefore more
+heavily influenced by abundant species. In contrast, the
+<code>Gross</code> method is based on correlation and consequently
+weights species equally.</p>
 </div>
 </div>
 <div id="citations" class="section level2 unnumbered">
-<h2>Citations</h2>
-<div id="refs" class="references">
-<div id="ref-Grman2010">
-<p>Grman, Emily, Jennifer A. Lau, Donald R. Schoolmaster, and Katherine L. Gross. 2010. “Mechanisms Contributing to Stability in Ecosystem Function Depend on the Environmental Context.” <em>Ecology Letters</em> 13 (11): 1400–1410. <a href="https://doi.org/10.1111/j.1461-0248.2010.01533.x">https://doi.org/10.1111/j.1461-0248.2010.01533.x</a>.</p>
+<h2 class="unnumbered">Citations</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Grman2010" class="csl-entry">
+Grman, Emily, Jennifer A. Lau, Donald R. Schoolmaster, and Katherine L.
+Gross. 2010. <span>“Mechanisms Contributing to Stability in Ecosystem
+Function Depend on the Environmental Context.”</span> <em>Ecology
+Letters</em> 13 (11): 1400–1410. <a href="https://doi.org/10.1111/j.1461-0248.2010.01533.x">https://doi.org/10.1111/j.1461-0248.2010.01533.x</a>.
 </div>
-<div id="ref-gross2014">
-<p>Gross, Kevin, Bradley J. Cardinale, Jeremy W. Fox, Andrew Gonzalez, Michel Loreau, H. Wayne Polley, Peter B. Reich, and Jasper van Ruijven. 2014. “Species Richness and the Temporal Stability of Biomass Production: A New Analysis of Recent Biodiversity Experiments.” <em>The American Naturalist</em> 183 (1): 1–12. <a href="https://doi.org/10.1086/673915">https://doi.org/10.1086/673915</a>.</p>
+<div id="ref-gross2014" class="csl-entry">
+Gross, Kevin, Bradley J. Cardinale, Jeremy W. Fox, et al. 2014.
+<span>“Species Richness and the Temporal Stability of Biomass
+Production: <span>A</span> New Analysis of Recent Biodiversity
+Experiments.”</span> <em>The American Naturalist</em> 183 (1): 1–12. <a href="https://doi.org/10.1086/673915">https://doi.org/10.1086/673915</a>.
 </div>
-<div id="ref-hallett2014">
-<p>Hallett, Lauren M., Joanna S. Hsu, Elsa E. Cleland, Scott L. Collins, Timothy L. Dickson, Emily C. Farrer, Laureano A. Gherardi, et al. 2014. “Biotic Mechanisms of Community Stability Shift Along a Precipitation Gradient.” <em>Ecology</em> 95 (6): 1693–1700. <a href="https://doi.org/10.1890/13-0895.1">https://doi.org/10.1890/13-0895.1</a>.</p>
+<div id="ref-hallett2014" class="csl-entry">
+Hallett, Lauren M., Joanna S. Hsu, Elsa E. Cleland, et al. 2014.
+<span>“Biotic Mechanisms of Community Stability Shift Along a
+Precipitation Gradient.”</span> <em>Ecology</em> 95 (6): 1693–700. <a href="https://doi.org/10.1890/13-0895.1">https://doi.org/10.1890/13-0895.1</a>.
 </div>
-<div id="ref-harms2001">
-<p>Harms, Kyle E., Richard Condit, Stephen P. Hubbell, and Robin B. Foster. 2001. “Habitat Associations of Trees and Shrubs in a 50-Ha Neotropical Forest Plot.” <em>Journal of Ecology</em> 89 (6). <a href="https://doi.org/10.1111/j.1365-2745.2001.00615.x">https://doi.org/10.1111/j.1365-2745.2001.00615.x</a>.</p>
+<div id="ref-harms2001" class="csl-entry">
+Harms, Kyle E., Richard Condit, Stephen P. Hubbell, and Robin B. Foster.
+2001. <span>“Habitat Associations of Trees and Shrubs in a 50-Ha
+<span>Neotropical</span> Forest Plot.”</span> <em>Journal of
+Ecology</em> 89 (6). <a href="https://doi.org/10.1111/j.1365-2745.2001.00615.x">https://doi.org/10.1111/j.1365-2745.2001.00615.x</a>.
 </div>
-<div id="ref-hector2010">
-<p>Hector, A., Y. Hautier, P. Saner, L. Wacker, R. Bagchi, J. Joshi, M. Scherer-Lorenzen, et al. 2010. “General Stabilizing Effects of Plant Diversity on Grassland Productivity Through Population Asynchrony and Overyielding.” <em>Ecology</em> 91 (8): 2213–20. <a href="https://doi.org/10.1890/09-1162.1">https://doi.org/10.1890/09-1162.1</a>.</p>
+<div id="ref-hector2010" class="csl-entry">
+<span class="nocase">Hector, A., Y. Hautier, P. Saner, et al.</span>
+2010. <span>“General Stabilizing Effects of Plant Diversity on Grassland
+Productivity Through Population Asynchrony and Overyielding.”</span>
+<em>Ecology</em> 91 (8): 2213–20. <a href="https://doi.org/10.1890/09-1162.1">https://doi.org/10.1890/09-1162.1</a>.
 </div>
-<div id="ref-houlahan2007">
-<p>Houlahan, J. E., D. J. Currie, K. Cottenie, G. S. Cumming, S. K. M. Ernest, C. S. Findlay, S. D. Fuhlendorf, et al. 2007. “Compensatory Dynamics Are Rare in Natural Ecological Communities.” <em>Proceedings of the National Academy of Sciences</em> 104 (9): 3273–7. <a href="https://doi.org/10.1073/pnas.0603798104">https://doi.org/10.1073/pnas.0603798104</a>.</p>
+<div id="ref-houlahan2007" class="csl-entry">
+<span class="nocase">Houlahan, J. E., D. J. Currie, K. Cottenie, et
+al.</span> 2007. <span>“Compensatory Dynamics Are Rare in Natural
+Ecological Communities.”</span> <em>Proceedings of the National Academy
+of Sciences</em> 104 (9): 3273–77. <a href="https://doi.org/10.1073/pnas.0603798104">https://doi.org/10.1073/pnas.0603798104</a>.
 </div>
-<div id="ref-loreau2008">
-<p>Loreau, Michel, and Claire de Mazancourt. 2008. “Species Synchrony and Its Drivers: Neutral and Nonneutral Community Dynamics in Fluctuating Environments.” <em>The American Naturalist</em> 172 (2): E48–E66. <a href="https://doi.org/10.1086/589746">https://doi.org/10.1086/589746</a>.</p>
+<div id="ref-loreau2008" class="csl-entry">
+Loreau, Michel, and Claire de Mazancourt. 2008. <span>“Species Synchrony
+and Its Drivers: <span>Neutral</span> and Nonneutral Community Dynamics
+in Fluctuating Environments.”</span> <em>The American Naturalist</em>
+172 (2): E48–66. <a href="https://doi.org/10.1086/589746">https://doi.org/10.1086/589746</a>.
 </div>
-<div id="ref-schluter1984">
-<p>Schluter, Dolph. 1984. “A Variance Test for Detecting Species Associations, with Some Example Applications.” <em>Ecology</em> 65 (3): 998–1005. <a href="https://doi.org/10.2307/1938071">https://doi.org/10.2307/1938071</a>.</p>
+<div id="ref-schluter1984" class="csl-entry">
+Schluter, Dolph. 1984. <span>“A Variance Test for Detecting Species
+Associations, with Some Example Applications.”</span> <em>Ecology</em>
+65 (3): 998–1005. <a href="https://doi.org/10.2307/1938071">https://doi.org/10.2307/1938071</a>.
 </div>
-<div id="ref-tilman1999">
-<p>Tilman, D. 1999. “The Ecological Consequences of Changes in Biodiversity: A Search for General Principles.” <em>Ecology</em> 80 (5): 1455–74. <a href="https://doi.org/10.1890/0012-9658%281999%29080%5B1455%3ATECOCI%5D2.0.CO%3B2">https://doi.org/10.1890/0012-9658%281999%29080%5B1455%3ATECOCI%5D2.0.CO%3B2</a>.</p>
+<div id="ref-tilman1999" class="csl-entry">
+Tilman, D. 1999. <span>“The Ecological Consequences of Changes in
+Biodiversity: <span>A</span> Search for General Principles.”</span>
+<em>Ecology</em> 80 (5): 1455–74. <a href="https://doi.org/10.1890/0012-9658%281999%29080%5B1455%3ATECOCI%5D2.0.CO%3B2">https://doi.org/10.1890/0012-9658%281999%29080%5B1455%3ATECOCI%5D2.0.CO%3B2</a>.
 </div>
 </div>
 </div>
